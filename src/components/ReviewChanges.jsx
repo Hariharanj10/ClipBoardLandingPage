@@ -25,7 +25,7 @@ function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenRevie
   return (
     <div>
       <Drawer
-        title="Drawer with extra actions"
+        title="Review Changes"
         width={500}
         onClose={onClose}
         open={OpenReview}
@@ -36,7 +36,7 @@ function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenRevie
         }
         footer={<Button onClick={onClose}>Cancel</Button>}
       >
-        <h3>Review Changes</h3>
+       
         {!trackChanges ? (
           <h3>No changes applied</h3>
         ) : (
@@ -51,3 +51,4 @@ function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenRevie
   );
 }
 export default ReviewChanges;
+  

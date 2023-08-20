@@ -10,11 +10,39 @@ import { GrLocation } from "react-icons/gr";
 import DropdownComponent from "./DropDown";
 const { Option } = Select;
 const Container = styled.div`
-  display: table;
   gap: 20px;
   font-size: 14px;
   color: #485c72;
 `;
+const CustomTable = styled(Table)`
+  margin-left: 30px;
+`;
+const CustomPrimaryButton = styled(Button)`
+margin-left: 10px;
+padding: 1px 6px;
+border-radius: 3px;
+border: 1px solid rgb(141, 177, 212);
+color: rgb(27, 99, 169);
+font-size: 11px;
+font-weight: 400;
+background: rgb(237, 243, 248);
+}
+`;
+const StyledRow1 = styled.div`
+color: #242e39;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  margin-left: 100px;
+}
+`;
+const StyledRow2=styled.div`
+font-weight: 500;
+font-size: 15px;
+line-height: 22px;
+margin-left: 20px;
+}
+`
 const StyledLink = styled(Link)`
   display: inline-block;
   padding: 5px 5px;
@@ -48,9 +76,7 @@ const Label = styled.label`
   margin-bottom: 5px;
   color: #637487;
 `;
-const ButtonWrapper = styled.div`
-  display: flex;
-`;
+
 const UpdateButtonStyles = {
   color: "#fff",
   borderColor: "#1B63A9",
@@ -100,6 +126,10 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
     setOpen(false);
   };
   const handleAdd = () => {
+    if (!value1 || !value2) {
+      alert("Please select both Tier and Role before adding.");
+      return;
+    }
     if (
       selectedValues.some(
         (item) => item.value1 === value1 && item.value2 === value2
@@ -114,15 +144,12 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
     localStorage.setItem("selectedValues", JSON.stringify(newValues));
   };
   const handleDelete = (index, text, i) => {
-    console.log(index, "index");
-    console.log(text, "text");
-    console.log(i);
     const newValues = selectedValues?.filter((_, i) => i !== index);
     setSelectedValues(newValues);
     setTrackChanges(true);
   };
   const handleDropdown = (value, index) => {
-    console.log(value,index)
+    console.log(value, index);
     setTrackChanges(true);
     if (value === "remove") {
       const newValues = selectedValues?.filter((_, i) => i !== index);
@@ -148,12 +175,14 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
       key: "value2",
       render: (text, i, index) =>
         text === "Tier Manager" ? (
-          <StyledHeadingH4>Tier Manager</StyledHeadingH4>
+          <StyledRow1>Tier Manager</StyledRow1>
         ) : (
-          <>
-            <StyledHeadingH4>User</StyledHeadingH4>
-            {index === isPrimary && <Button type="default"> primary</Button>}
-          </>
+          <StyledRow1>
+            User
+            {index === isPrimary && (
+              <CustomPrimaryButton type="default"> primary</CustomPrimaryButton>
+            )}
+          </StyledRow1>
         ),
     },
     {
@@ -164,7 +193,11 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
           {text !== "User" ? (
             <BiX size={30} onClick={() => handleDelete(index, text, i)} />
           ) : (
-            <DropdownComponent handleDropdown={handleDropdown} index={index} items={items} />
+            <DropdownComponent
+              handleDropdown={handleDropdown}
+              index={index}
+              items={items}
+            />
           )}
         </div>
       ),
@@ -174,7 +207,7 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
     key: index,
     value1: (
       <>
-        <GrLocation />
+        <GrLocation size={15}/>
         {item.value1}
       </>
     ),
@@ -188,7 +221,6 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
       </Button>
 
       <div>
-        {" "}
         <Button type="primary" onClick={handleLogout}>
           Logout
         </Button>
@@ -196,7 +228,7 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
 
       <Drawer
         title="Tier and Role Assignment"
-        width={720}
+        width={600}
         onClose={onClose}
         visible={open}
         bodyStyle={{
@@ -272,14 +304,24 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
 
           <Button
             type="primary"
-            style={{ backgroundColor: "#f1f1f1" }}
+            style={{
+              backgroundColor: "#f1f1f1",
+              color: "#242E39",
+              borderColor: "#d9d9d9",
+              background: "#E4E7EA",
+              border: "1px solid transparent",
+            }}
             shape="circle"
             icon={<PlusOutlined />}
             onClick={handleAdd}
           />
         </InputContainer>
 
-        <Table dataSource={dataSource} columns={columns} pagination={false} />
+        <CustomTable
+          dataSource={dataSource}
+          columns={columns}
+          pagination={false}
+        />
       </Drawer>
     </Container>
   );
