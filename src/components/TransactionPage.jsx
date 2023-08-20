@@ -154,6 +154,7 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
     if (value === "remove") {
       const newValues = selectedValues?.filter((_, i) => i !== index);
       setSelectedValues(newValues);
+     
     } else if (value === "set as primary") {
       setIsPrimary(index);
     }
@@ -163,6 +164,7 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
   };
   const handleUpdate = () => {
     setOpenReview(true);
+    localStorage.setItem('selectedValues', JSON.stringify(selectedValues));
     navigate("/ReviewChanges");
   };
   const columns = [

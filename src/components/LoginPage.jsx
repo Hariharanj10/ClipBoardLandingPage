@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   display: flex;
@@ -42,6 +41,9 @@ const LoginPage = ({ setIsLogin }) => {
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const handleLogin = (e) => {
+    if(!username && !password){
+      return false;
+    }
     e.preventDefault();
     setIsLogin(true);
     navigate("/TransactionPage");
