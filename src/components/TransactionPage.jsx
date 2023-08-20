@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
 import { Select, Button, Drawer, Dropdown, Table, Tag, Menu } from "antd";
 import { FaTimes } from "react-icons/fa";
-import { BiDotsVerticalRounded, BiInfinite, BiX } from "react-icons/bi";
+import { BiX } from "react-icons/bi";
 import { PlusOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { FiLink } from "react-icons/fi";
 import { GrLocation } from "react-icons/gr";
+import DropdownComponent from "./DropDown";
 const { Option } = Select;
 const Container = styled.div`
   display: table;
   gap: 20px;
+  font-size: 14px;
+  color: #485c72;
 `;
 const StyledLink = styled(Link)`
   display: inline-block;
@@ -21,7 +24,8 @@ const StyledLink = styled(Link)`
   border-radius: 4px;
 `;
 const CancelLink = styled(StyledLink)`
-  background-color: grey;
+  background-color: #e4e7ea;
+  color: #242e39;
 `;
 const TableFooter = styled.div`
   display: flex;
@@ -34,9 +38,38 @@ const InputContainer = styled.div`
   margin: 10px;
   padding: 10px;
 `;
-const ButtonWrapper =styled.div`
-    display:flex;
-`
+const FormGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+`;
+const Label = styled.label`
+  margin-bottom: 5px;
+  color: #637487;
+`;
+const ButtonWrapper = styled.div`
+  display: flex;
+`;
+const UpdateButtonStyles = {
+  color: "#fff",
+  borderColor: "#1B63A9",
+  background: "#1B63A9",
+  textShadow: "0 -1px 0 rgba(0, 0, 0, 0.12)",
+  boxShadow: "0 2px 0 rgba(0, 0, 0, 0.045)",
+};
+const CancelButtonStyles = {
+  color: "#242E39",
+  borderColor: "#d9d9d9",
+  background: "#E4E7EA",
+};
+const StyledHeadingH4 = styled.h4`
+  color: #242e39;
+  font-weight: 500;
+  font-size: 15px;
+  line-height: 22px;
+  margin-left: 20px;
+`;
 const items = [
   {
     label: "Set as primary",
@@ -47,7 +80,7 @@ const items = [
     value: "remove",
   },
 ];
-const TransactionPage = ({ setTrackChanges }) => {
+const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
   useEffect(() => {
     const storedValues = localStorage.getItem("selectedValues");
     if (storedValues) {
@@ -59,6 +92,7 @@ const TransactionPage = ({ setTrackChanges }) => {
   const [value2, setValue2] = useState(null);
   const [isPrimary, setIsPrimary] = useState(0);
   const [open, setOpen] = useState(false);
+  const navigate = useNavigate();
   const showDrawer = () => {
     setOpen(true);
   };
@@ -79,23 +113,30 @@ const TransactionPage = ({ setTrackChanges }) => {
     const newValues = [...selectedValues, { value1, value2 }];
     localStorage.setItem("selectedValues", JSON.stringify(newValues));
   };
-  const handleDelete = (index,text,i) => {
-    console.log(index ,"index");
-    console.log(text ,"text");
+  const handleDelete = (index, text, i) => {
+    console.log(index, "index");
+    console.log(text, "text");
     console.log(i);
-    const newValues = selectedValues.filter((_, i) => i !== index);
+    const newValues = selectedValues?.filter((_, i) => i !== index);
     setSelectedValues(newValues);
     setTrackChanges(true);
   };
   const handleDropdown = (value, index) => {
+    console.log(value,index)
     setTrackChanges(true);
     if (value === "remove") {
-      console.log(index, value);
-      const newValues = selectedValues.filter((_, i) => i !== index);
+      const newValues = selectedValues?.filter((_, i) => i !== index);
       setSelectedValues(newValues);
     } else if (value === "set as primary") {
       setIsPrimary(index);
     }
+  };
+  const handleLogout = () => {
+    setIsLogin(false);
+  };
+  const handleUpdate = () => {
+    setOpenReview(true);
+    navigate("/ReviewChanges");
   };
   const columns = [
     {
@@ -107,11 +148,12 @@ const TransactionPage = ({ setTrackChanges }) => {
       key: "value2",
       render: (text, i, index) =>
         text === "Tier Manager" ? (
-          <h4>Tier Manager</h4>
+          <StyledHeadingH4>Tier Manager</StyledHeadingH4>
         ) : (
           <>
-          User
-          {index === isPrimary && <Button type="primary"> primary</Button>}</>
+            <StyledHeadingH4>User</StyledHeadingH4>
+            {index === isPrimary && <Button type="default"> primary</Button>}
+          </>
         ),
     },
     {
@@ -119,26 +161,10 @@ const TransactionPage = ({ setTrackChanges }) => {
       key: "actions",
       render: (text, i, index) => (
         <div>
-          
           {text !== "User" ? (
-            <Button onClick={() => handleDelete(index,text,i)}>
-              <BiX />
-            </Button>
+            <BiX size={30} onClick={() => handleDelete(index, text, i)} />
           ) : (
-            <Dropdown.Button
-            overlay={
-              <Menu>
-                {items?.map((item) => (
-                  <Menu.Item key={item.value}>
-                    <Button onClick={() => handleDropdown(item.value, index)}>
-                      {item.label}
-                    </Button>
-                  </Menu.Item>
-                ))}
-              </Menu>
-            }
-          >
-          </Dropdown.Button>
+            <DropdownComponent handleDropdown={handleDropdown} index={index} items={items} />
           )}
         </div>
       ),
@@ -158,8 +184,16 @@ const TransactionPage = ({ setTrackChanges }) => {
   return (
     <Container>
       <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
-        New account
+        open
       </Button>
+
+      <div>
+        {" "}
+        <Button type="primary" onClick={handleLogout}>
+          Logout
+        </Button>
+      </div>
+
       <Drawer
         title="Tier and Role Assignment"
         width={720}
@@ -168,50 +202,77 @@ const TransactionPage = ({ setTrackChanges }) => {
         bodyStyle={{
           paddingBottom: 80,
         }}
+        headerStyle={{ backgroundColor: "#f0f2f4" }}
         footer={
           <TableFooter>
-            <CancelLink to="/">
-              <FaTimes />
-              cancel
-            </CancelLink>
-            <StyledLink to="/ReviewChanges">Update</StyledLink>
+            <Button
+              type="default"
+              style={CancelButtonStyles}
+              href="/"
+              icon={<FaTimes />}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="primary"
+              style={UpdateButtonStyles}
+              onClick={handleUpdate}
+            >
+              Update
+            </Button>
           </TableFooter>
         }
       >
         <InputContainer>
-          <Select
-            showSearch
-            style={{ width: 200 }}
-            placeholder="Select Tiers"
-            onChange={(value) => {
-              setValue1(value);
-            }}
-          >
-            {["Pune", "Chennai", "Bengaluru", "Delhi", "Kolkata", "Mumbai"].map(
-              (tier) => (
+          <FormGroup>
+            <Label htmlFor="select-1">Tiers</Label>
+            <Select
+              showSearch
+              style={{ width: 200 }}
+              placeholder="Select Tiers"
+              onChange={(value) => {
+                setValue1(value);
+              }}
+              id="select-1"
+            >
+              {[
+                "Pune",
+                "Chennai",
+                "Bengaluru",
+                "Delhi",
+                "Kolkata",
+                "Mumbai",
+              ].map((tier) => (
                 <Option key={tier} value={tier}>
                   {tier}
                 </Option>
-              )
-            )}
-          </Select>
-          <FiLink size={30} />
-          <Select
-            showSearch
-            style={{ width: 200 }}
-            placeholder="Select Roles"
-            onChange={(value) => {
-              setValue2(value);
-            }}
-          >
-            {["Tier Manager", "User"]?.map((role) => (
-              <Option key={role} value={role}>
-                {role}
-              </Option>
-            ))}
-          </Select>
+              ))}
+            </Select>
+          </FormGroup>
+          <FiLink size={15} />
+
+          <FormGroup>
+            <Label htmlFor="select-2">Roles</Label>
+            <Select
+              showSearch
+              style={{ width: 200 }}
+              placeholder="Select Roles"
+              onChange={(value) => {
+                setValue2(value);
+              }}
+              id="select-2"
+            >
+              {["Tier Manager", "User"]?.map((role) => (
+                <Option key={role} value={role}>
+                  {role}
+                </Option>
+              ))}
+            </Select>
+          </FormGroup>
+
           <Button
             type="primary"
+            style={{ backgroundColor: "#f1f1f1" }}
             shape="circle"
             icon={<PlusOutlined />}
             onClick={handleAdd}

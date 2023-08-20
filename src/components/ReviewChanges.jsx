@@ -11,14 +11,12 @@ const StyledLink = styled(Link)`
   text-decoration: none;
   border-radius: 4px;
 `;
-function ReviewChanges({ trackChanges, setTrackChanges }) {
-  const [open, setOpen] = useState(false);
+function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenReview }) {
+  
   const navigate = useNavigate();
-  const showDrawer = () => {
-    setOpen(true);
-  };
+  
   const onClose = () => {
-    setOpen(false);
+    setOpenReview(false);
   };
   const handleConfirm = () => {
     setTrackChanges(false);
@@ -26,14 +24,11 @@ function ReviewChanges({ trackChanges, setTrackChanges }) {
   };
   return (
     <div>
-      <Button type="primary" onClick={showDrawer}>
-        Open
-      </Button>
       <Drawer
         title="Drawer with extra actions"
         width={500}
         onClose={onClose}
-        open={open}
+        open={OpenReview}
         extra={
           <Space>
             <Button onClick={onClose}>Cancel</Button>

@@ -15,6 +15,7 @@ const MainSec = () => {
     <MainSection>
       <div>
          <Link to="/TransactionPage"> TransactionPage </Link>
+         <Link to="/LoginPage"> Login </Link>
       </div>
       <LogoContainer>
         <img src={logo} alt="logo" />
