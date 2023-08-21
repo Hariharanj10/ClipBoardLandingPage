@@ -3,14 +3,6 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button, Drawer, Space } from "antd";
-const StyledLink = styled(Link)`
-  display: inline-block;
-  padding: 5px 5px;
-  background-color: grey;
-  color: white;
-  text-decoration: none;
-  border-radius: 4px;
-`;
 function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenReview }) {
   
   const navigate = useNavigate();
@@ -34,7 +26,10 @@ function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenRevie
             <Button onClick={onClose}>Cancel</Button>
           </Space>
         }
-        footer={<Button onClick={onClose}>Cancel</Button>}
+        footer={<> <Button href="/TransactionPage">Back</Button>
+        <Button type="primary" onClick={handleConfirm}  disabled={trackChanges}>
+          confirm
+        </Button></>}
       >
        
         {!trackChanges ? (
@@ -42,10 +37,7 @@ function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenRevie
         ) : (
           <h3>changes will apply for Tiers and Roles Management</h3>
         )}
-        <StyledLink to="/TransactionPage">Back</StyledLink>
-        <Button type="primary" onClick={handleConfirm}>
-          confirm
-        </Button>
+       
       </Drawer>
     </div>
   );

@@ -4,3 +4,4 @@ const PrivateRoutes = ({ isLogin }) => {
   return auth.token ? <Outlet /> : <Navigate to="/" />;
 };
 export default PrivateRoutes;
+ 
