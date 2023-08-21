@@ -3,10 +3,14 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import { Button, Drawer, Space } from "antd";
-function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenReview }) {
-  
+function ReviewChanges({
+  trackChanges,
+  setTrackChanges,
+  setOpenReview,
+  OpenReview,
+}) {
   const navigate = useNavigate();
-  
+
   const onClose = () => {
     setOpenReview(false);
   };
@@ -26,21 +30,28 @@ function ReviewChanges({ trackChanges, setTrackChanges, setOpenReview, OpenRevie
             <Button onClick={onClose}>Cancel</Button>
           </Space>
         }
-        footer={<> <Button href="/TransactionPage">Back</Button>
-        <Button type="primary" onClick={handleConfirm}  disabled={trackChanges}>
-          confirm
-        </Button></>}
+        footer={
+          <>
+            {" "}
+            <Button href="/TransactionPage">Back</Button>
+            <Button
+              type="primary"
+              onClick={handleConfirm}
+              disabled={!trackChanges}
+              id="confirmButton"
+            >
+              confirm
+            </Button>
+          </>
+        }
       >
-       
         {!trackChanges ? (
           <h3>No changes applied</h3>
         ) : (
           <h3>changes will apply for Tiers and Roles Management</h3>
         )}
-       
       </Drawer>
     </div>
   );
 }
 export default ReviewChanges;
-  

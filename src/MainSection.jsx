@@ -1,5 +1,4 @@
 import logo from "./svgs/logo.svg";
-import { Link } from "react-router-dom";
 import {
   MainSection,
   LogoContainer,
@@ -13,10 +12,7 @@ import {
 const MainSec = () => {
   return (
     <MainSection>
-      <div>
-         <Link to="/TransactionPage"> TransactionPage </Link>
-         <Link to="/LoginPage"> Login </Link>
-      </div>
+     
       <LogoContainer>
         <img src={logo} alt="logo" />
       </LogoContainer>

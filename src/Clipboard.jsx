@@ -7,11 +7,13 @@ import FourthSec from "./FourthSection";
 import BrandSec from "./BrandSection";
 import DownloadSec from "./DownloadSection";
 import { Container } from "./ClipboardStyles";
+import Navbar from "./components/Navbar";
 
 function ClipBoard() {
   return (
     <div>
       <Container>
+        <Navbar/>
         <MainSec />
         <SecondSec />
         <ThirdSec />

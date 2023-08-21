@@ -36,13 +36,13 @@ color: #242e39;
   margin-left: 100px;
 }
 `;
-const StyledRow2=styled.div`
+const StyledRow2 = styled.div`
 font-weight: 500;
 font-size: 15px;
 line-height: 22px;
 margin-left: 20px;
 }
-`
+`;
 const StyledLink = styled(Link)`
   display: inline-block;
   padding: 5px 5px;
@@ -154,7 +154,6 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
     if (value === "remove") {
       const newValues = selectedValues?.filter((_, i) => i !== index);
       setSelectedValues(newValues);
-     
     } else if (value === "set as primary") {
       setIsPrimary(index);
     }
@@ -164,7 +163,7 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
   };
   const handleUpdate = () => {
     setOpenReview(true);
-    localStorage.setItem('selectedValues', JSON.stringify(selectedValues));
+    localStorage.setItem("selectedValues", JSON.stringify(selectedValues));
     navigate("/ReviewChanges");
   };
   const columns = [
@@ -209,7 +208,7 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
     key: index,
     value1: (
       <>
-        <GrLocation size={15}/>
+        <GrLocation size={15} />
         {item.value1}
       </>
     ),
@@ -218,12 +217,12 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
 
   return (
     <Container>
-      <Button type="primary" onClick={showDrawer} icon={<PlusOutlined />}>
+      <Button type="primary" id="openButton" onClick={showDrawer} icon={<PlusOutlined />}>
         open
       </Button>
 
       <div>
-        <Button type="primary" onClick={handleLogout}>
+        <Button type="primary" onClick={handleLogout} id="logoutButton">
           Logout
         </Button>
       </div>
@@ -251,6 +250,7 @@ const TransactionPage = ({ setTrackChanges, setOpenReview, setIsLogin }) => {
               type="primary"
               style={UpdateButtonStyles}
               onClick={handleUpdate}
+              id="updateButton"
             >
               Update
             </Button>
